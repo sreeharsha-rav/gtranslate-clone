@@ -23,6 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# environment files
+.env
+
 # wrangler files
 .wrangler
 .dev.vars
