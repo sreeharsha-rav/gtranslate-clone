@@ -1,20 +1,36 @@
 import PropTypes from "prop-types";
 import { memo, useCallback } from "react";
 import PanelActions from "./PanelActions";
+import { useSetAtom, useAtomValue } from "jotai";
+import {
+  speakInputAtom,
+  speakOutputAtom,
+  inputTTSLoadingAtom,
+  outputTTSLoadingAtom,
+} from "../../atoms/tts";
+import {
+  sourceLanguageAtom,
+  targetLanguageAtom,
+} from "../../atoms/translation";
 
-const TextPanel = memo(({ value, onChange, language, isReadOnly = false }) => {
+const TextPanel = memo(({ value, onChange, isReadOnly = false }) => {
   const handleCopy = useCallback(() => {
-    console.log(`Copying ${value} to clipboard`);
     navigator.clipboard.writeText(value);
   }, [value]);
 
-  const handleSpeak = useCallback(() => {
-    // TTS implementation
-    // const utterance = new SpeechSynthesisUtterance(value);
-    // utterance.lang = language.code;
-    // speechSynthesis.speak(utterance);
-    console.log(`Speaking ${value} in ${language.code}`);
-  }, [value, language]);
+  // Get the appropriate atoms based on whether this is input or output
+  const speakAtom = isReadOnly ? speakOutputAtom : speakInputAtom;
+  const loadingAtom = isReadOnly ? outputTTSLoadingAtom : inputTTSLoadingAtom;
+  const languageAtom = isReadOnly ? targetLanguageAtom : sourceLanguageAtom;
+
+  const speak = useSetAtom(speakAtom);
+  const isLoading = useAtomValue(loadingAtom);
+  const language = useAtomValue(languageAtom);
+
+  const handleSpeak = useCallback(async () => {
+    speak();
+    console.log("Speaking...");
+  }, [speak]);
 
   return (
     <div className="relative bg-base-100 rounded-box p-4 shadow-sm border border-base-300">
@@ -34,8 +50,9 @@ const TextPanel = memo(({ value, onChange, language, isReadOnly = false }) => {
       <PanelActions
         onCopy={handleCopy}
         onSpeak={handleSpeak}
-        canSpeak={value.length > 0}
+        canSpeak={value.length > 0 && language?.tts}
         canCopy={value.length > 0}
+        isSpeaking={isLoading}
       />
     </div>
   );
@@ -44,10 +61,6 @@ const TextPanel = memo(({ value, onChange, language, isReadOnly = false }) => {
 TextPanel.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  language: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    code: PropTypes.string.isRequired,
-  }).isRequired,
   isReadOnly: PropTypes.bool,
 };
 

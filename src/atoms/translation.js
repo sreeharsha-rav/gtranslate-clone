@@ -1,9 +1,23 @@
 import { atom } from "jotai";
-import { env } from "../config";
+import { translateText } from "../api";
 
 // original base atoms
-export const sourceLanguageAtom = atom({ name: "English", code: "en" });
-export const targetLanguageAtom = atom({ name: "Hindi", code: "hi" });
+export const sourceLanguageAtom = atom({
+  name: "English",
+  code: "en",
+  tts: true,
+  ttsCode: ["en-IN"],
+  ttsName: "en-IN-Standard-A",
+  ssmlGender: "FEMALE",
+});
+export const targetLanguageAtom = atom({
+  name: "Hindi",
+  code: "hi",
+  tts: true,
+  ttsCode: ["hi-IN"],
+  ttsName: "hi-IN-Standard-A",
+  ssmlGender: "FEMALE",
+});
 export const sourceTextAtom = atom("");
 export const targetTextAtom = atom("");
 
@@ -18,38 +32,38 @@ export const canTranslateAtom = atom((get) => {
   );
 });
 
-// derived async atom
+// Add loading state
+export const translationLoadingAtom = atom(false);
+
+// Enhanced async translation atom
 export const translateAtom = atom(null, async (get, set) => {
-  const sourceText = get(sourceTextAtom);
-  const sourceLanguage = get(sourceLanguageAtom);
-  const targetLanguage = get(targetLanguageAtom);
-
-  if (!get(canTranslateAtom)) {
-    set(targetTextAtom, "");
-    return;
-  }
-
   try {
-    const response = await fetch(`${env.API_BASE_URL}/translate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text: sourceText,
-        sourceLang: sourceLanguage.code,
-        targetLang: targetLanguage.code,
-      }),
-    });
+    set(translationLoadingAtom, true);
 
-    if (!response.ok) {
-      throw new Error("Translation failed");
+    const sourceText = get(sourceTextAtom);
+    const sourceLanguage = get(sourceLanguageAtom);
+    const targetLanguage = get(targetLanguageAtom);
+
+    if (!get(canTranslateAtom)) {
+      set(targetTextAtom, "");
+      return;
     }
 
-    const { translation } = await response.json();
+    const translation = await translateText(
+      sourceText,
+      sourceLanguage.code,
+      targetLanguage.code
+    );
+
     set(targetTextAtom, translation);
   } catch (error) {
-    console.error("Translation error:", error);
-    throw error;
+    // Add error handling
+    console.error("Translation failed:", error);
+    set(targetTextAtom, ""); // or set an error message
+  } finally {
+    set(translationLoadingAtom, false);
   }
 });
+
+// Add error handling
+export const translationErrorAtom = atom(null);

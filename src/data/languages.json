@@ -1,32 +1,242 @@
 [
-  { "code": "ar", "name": "Arabic" },
-  { "code": "as", "name": "Assamese" },
-  { "code": "bn", "name": "Bengali" },
-  { "code": "bho", "name": "Bhojpuri" },
-  { "code": "yue", "name": "Cantonese" },
-  { "code": "zh", "name": "Chinese" },
-  { "code": "en", "name": "English" },
-  { "code": "fr", "name": "French" },
-  { "code": "de", "name": "German" },
-  { "code": "gu", "name": "Gujarati" },
-  { "code": "iw", "name": "Hebrew" },
-  { "code": "hi", "name": "Hindi" },
-  { "code": "it", "name": "Italian" },
-  { "code": "ja", "name": "Japanese" },
-  { "code": "kn", "name": "Kannada" },
-  { "code": "gom", "name": "Konkani" },
-  { "code": "ko", "name": "Korean" },
-  { "code": "la", "name": "Latin" },
-  { "code": "ml", "name": "Malayalam" },
-  { "code": "ne", "name": "Nepali" },
-  { "code": "pt", "name": "Portuguese (Brazil)" },
-  { "code": "pa", "name": "Punjabi (Gurmukhi)" },
-  { "code": "ru", "name": "Russian" },
-  { "code": "sa", "name": "Sanskrit" },
-  { "code": "si", "name": "Sinhala" },
-  { "code": "es", "name": "Spanish" },
-  { "code": "ta", "name": "Tamil" },
-  { "code": "te", "name": "Telugu" },
-  { "code": "ur", "name": "Urdu" },
-  { "code": "he", "name": "Hebrew" }
+  {
+    "code": "ar",
+    "name": "Arabic",
+    "tts": true,
+    "ttsCode": ["ar-XA"],
+    "ttsName": "ar-XA-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "as",
+    "name": "Assamese",
+    "tts": false,
+    "ttsCode": null,
+    "ttsName": null,
+    "ssmlGender": null
+  },
+  {
+    "code": "bn",
+    "name": "Bengali",
+    "tts": true,
+    "ttsCode": ["bn-IN"],
+    "ttsName": "bn-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "bho",
+    "name": "Bhojpuri",
+    "tts": false,
+    "ttsCode": null,
+    "ttsName": null,
+    "ssmlGender": null
+  },
+  {
+    "code": "yue",
+    "name": "Cantonese",
+    "tts": true,
+    "ttsCode": ["yue-HK"],
+    "ttsName": "yue-HK-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "zh",
+    "name": "Chinese",
+    "tts": true,
+    "ttsCode": ["cmn-CN", "cmn-TW"],
+    "ttsName": "cmn-CN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "en",
+    "name": "English",
+    "tts": true,
+    "ttsCode": ["en-IN", "en-GB", "en-US", "en-AU"],
+    "ttsName": "en-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "fr",
+    "name": "French",
+    "tts": true,
+    "ttsCode": ["fr-FR", "fr-CA"],
+    "ttsName": "fr-FR-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "de",
+    "name": "German",
+    "tts": true,
+    "ttsCode": ["de-DE"],
+    "ttsName": "de-DE-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "gu",
+    "name": "Gujarati",
+    "tts": true,
+    "ttsCode": ["gu-IN"],
+    "ttsName": "gu-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "iw",
+    "name": "Hebrew",
+    "tts": true,
+    "ttsCode": ["he-IL"],
+    "ttsName": "he-IL-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "hi",
+    "name": "Hindi",
+    "tts": true,
+    "ttsCode": ["hi-IN"],
+    "ttsName": "hi-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "it",
+    "name": "Italian",
+    "tts": true,
+    "ttsCode": ["it-IT"],
+    "ttsName": "it-IT-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "ja",
+    "name": "Japanese",
+    "tts": true,
+    "ttsCode": ["ja-JP"],
+    "ttsName": "ja-JP-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "kn",
+    "name": "Kannada",
+    "tts": true,
+    "ttsCode": ["kn-IN"],
+    "ttsName": "kn-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "gom",
+    "name": "Konkani",
+    "tts": false,
+    "ttsCode": null,
+    "ttsName": null,
+    "ssmlGender": null
+  },
+  {
+    "code": "ko",
+    "name": "Korean",
+    "tts": true,
+    "ttsCode": ["ko-KR"],
+    "ttsName": "ko-KR-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "la",
+    "name": "Latin",
+    "tts": false,
+    "ttsCode": null,
+    "ttsName": null,
+    "ssmlGender": null
+  },
+  {
+    "code": "ml",
+    "name": "Malayalam",
+    "tts": true,
+    "ttsCode": ["ml-IN"],
+    "ttsName": "ml-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "ne",
+    "name": "Nepali",
+    "tts": false,
+    "ttsCode": null,
+    "ttsName": null,
+    "ssmlGender": null
+  },
+  {
+    "code": "pt",
+    "name": "Portuguese (Brazil)",
+    "tts": true,
+    "ttsCode": ["pt-BR", "pt-PT"],
+    "ttsName": "pt-BR-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "pa",
+    "name": "Punjabi (Gurmukhi)",
+    "tts": true,
+    "ttsCode": ["pa-IN"],
+    "ttsName": "pa-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "ru",
+    "name": "Russian",
+    "tts": true,
+    "ttsCode": ["ru-RU"],
+    "ttsName": "ru-RU-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "sa",
+    "name": "Sanskrit",
+    "tts": false,
+    "ttsCode": null,
+    "ttsName": null,
+    "ssmlGender": null
+  },
+  {
+    "code": "si",
+    "name": "Sinhala",
+    "tts": false,
+    "ttsCode": null,
+    "ttsName": null,
+    "ssmlGender": null
+  },
+  {
+    "code": "es",
+    "name": "Spanish",
+    "tts": true,
+    "ttsCode": ["es-ES", "es-US"],
+    "ttsName": "es-ES-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "ta",
+    "name": "Tamil",
+    "tts": true,
+    "ttsCode": ["ta-IN"],
+    "ttsName": "ta-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "te",
+    "name": "Telugu",
+    "tts": true,
+    "ttsCode": ["te-IN"],
+    "ttsName": "te-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "ur",
+    "name": "Urdu",
+    "tts": true,
+    "ttsCode": ["ur-IN"],
+    "ttsName": "ur-IN-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  {
+    "code": "he",
+    "name": "Hebrew",
+    "tts": true,
+    "ttsCode": ["he-IL"],
+    "ttsName": "he-IL-Standard-A",
+    "ssmlGender": "FEMALE"
+  }
 ]

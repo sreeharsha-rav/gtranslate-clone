@@ -1,10 +1,9 @@
 import TextPanel from "../TextPanel";
 import { useAtomValue } from "jotai";
-import { targetTextAtom, targetLanguageAtom } from "../../atoms/translation";
+import { targetTextAtom } from "../../atoms/translation";
 
 const TranslationOutput = () => {
   const targetText = useAtomValue(targetTextAtom);
-  const targetLanguage = useAtomValue(targetLanguageAtom);
 
   return (
     <TextPanel
@@ -12,7 +11,6 @@ const TranslationOutput = () => {
       onChange={() => {
         console.log("Translation output is read-only");
       }}
-      language={targetLanguage}
       isReadOnly={true}
     />
   );
