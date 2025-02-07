@@ -1,8 +1,23 @@
-# React + Vite
+# GTranslate Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A clone of Google Translate using React, Vite, and Jotai.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [x] Speech-to-Text (STT) - Google WebkitSpeechRecognition
+- [x] Text-to-Speech (TTS) - Google Cloud Text-to-Speech
+- [x] Translation - Google Translation API
+
+## Development
+
+```bash
+pnpm install
+pnpm dev
+```
+
+## Deployment
+
+```bash
+pnpm build
+pnpm deploy
+```
