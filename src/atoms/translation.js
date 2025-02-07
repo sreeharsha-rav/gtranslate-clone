@@ -66,4 +66,4 @@ export const translateAtom = atom(null, async (get, set) => {
 });
 
 // Add error handling
-export const translationErrorAtom = atom(null);
+// export const translationErrorAtom = atom(null);

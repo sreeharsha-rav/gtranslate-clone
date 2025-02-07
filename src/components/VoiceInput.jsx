@@ -1,42 +1,28 @@
 // import { sourceTextAtom } from "../atoms/translation";
-import { useAtom } from "jotai";
-import { isListeningAtom } from "../atoms/voice";
+import { useAtom, useSetAtom } from "jotai";
+import { isListeningAtom, speechRecognitionAtom } from "../atoms/voice";
+import { sourceTextAtom } from "../atoms/translation";
 import { Mic, MicOff } from "lucide-react";
+import { useCallback } from "react";
 
 const VoiceInput = () => {
-  // const setSourceText = useSetAtom(sourceTextAtom);
-  const [isListening, setIsListening] = useAtom(isListeningAtom);
+  const [isListening] = useAtom(isListeningAtom);
+  const [, dispatch] = useAtom(speechRecognitionAtom);
+  const setSourceText = useSetAtom(sourceTextAtom);
 
-  // const handleVoiceInput = useCallback(async () => {
-  //   try {
-  //     const recognition = new window.webkitSpeechRecognition();
-  //     recognition.lang = 'en-US';
-
-  //     recognition.onresult = (event) => {
-  //       const transcript = event.results[0][0].transcript;
-  //       setInputText(prev => prev + ' ' + transcript);
-  //     };
-
-  //     recognition.start();
-  //     setIsListening(true);
-
-  //     recognition.onend = () => {
-  //       setIsListening(false);
-  //     };
-  //   } catch (error) {
-  //     console.error('Speech recognition failed:', error);
-  //   }
-  // }, [setInputText]);
-
-  const handleVoiceInput = () => {
+  const handleVoiceInput = useCallback(() => {
+    // use WebkitSpeechRecognition
     if (isListening) {
-      setIsListening(false);
+      dispatch({ type: "STOP" });
       console.log("Voice input is stopped.. 🛑");
     } else {
-      setIsListening(true);
+      dispatch({
+        type: "START",
+        onTranscript: (transcript) => setSourceText(transcript),
+      });
       console.log("Voice input is listening.. 🎤");
     }
-  };
+  }, [isListening, dispatch, setSourceText]);
 
   return (
     <div className="flex flex-col gap-2 justify-center items-center">

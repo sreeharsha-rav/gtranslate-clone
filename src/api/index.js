@@ -24,16 +24,7 @@ export const translateText = async (text, sourceLang, targetLang) => {
   }
 };
 
-/**
- * Synthesize speech from text
- * @param {string} text - The text to synthesize
- * @param {Object} voice - The voice configuration
- * @param {string} voice.languageCode - The language code (e.g. "en-US")
- * @param {string} voice.name - The voice name (e.g. "en-US-Standard-A")
- * @param {string} voice.ssmlGender - The voice gender (e.g. "FEMALE")
- * @param {Object} audioConfig - Optional audio configuration
- * @returns {Promise<Audio|null>} Audio object or null if synthesis failed
- */
+// Text-to-Speech API
 export const synthesizeSpeech = async (
   text,
   voice,
@@ -83,17 +74,17 @@ export const synthesizeSpeech = async (
   }
 };
 
-// Speech-to-Text Component
-const transcribeAudio = async (audioBlob) => {
-  const response = await fetch(`${env.API_BASE_URL}/stt`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/octet-stream",
-      "X-Auth-Secret": "auth-secret",
-    },
-    body: audioBlob,
-  });
+// TODO: Speech-to-Text Component
+// const transcribeAudio = async (audioBlob) => {
+//   const response = await fetch(`${env.API_BASE_URL}/stt`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/octet-stream",
+//       "X-Auth-Secret": "auth-secret",
+//     },
+//     body: audioBlob,
+//   });
 
-  const { transcript } = await response.json();
-  return transcript;
-};
+//   const { transcript } = await response.json();
+//   return transcript;
+// };
