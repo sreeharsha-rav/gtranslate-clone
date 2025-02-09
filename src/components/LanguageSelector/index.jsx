@@ -1,8 +1,5 @@
 import languages from "../../data/languages.json";
-import {
-  sourceLanguageAtom,
-  targetLanguageAtom,
-} from "../../atoms/translation";
+import { sourceLanguageAtom, targetLanguageAtom } from "../../atoms/index";
 import { useAtom } from "jotai";
 import LanguageDropdown from "./LanguageDropdown";
 import SwapButton from "./SwapButton";

@@ -1,13 +1,14 @@
 import { atom } from "jotai";
 import { synthesizeSpeech } from "../api";
-import {
-  sourceTextAtom,
-  sourceLanguageAtom,
-  targetTextAtom,
-  targetLanguageAtom,
-} from "./translation";
+import { sourceLanguageAtom, targetLanguageAtom } from "./index";
+import { sourceTextAtom, targetTextAtom } from "./translation";
+
+// speech base atoms
+export const sourceSpeechAtom = atom(null);
+export const targetSpeechAtom = atom(null);
 
 // Loading state atoms
+export const isSpeakingAtom = atom(false);
 export const inputTTSLoadingAtom = atom(false);
 export const outputTTSLoadingAtom = atom(false);
 

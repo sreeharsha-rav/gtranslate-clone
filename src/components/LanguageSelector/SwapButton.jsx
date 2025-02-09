@@ -1,11 +1,6 @@
 import { Repeat } from "lucide-react";
-
-import {
-  sourceLanguageAtom,
-  targetLanguageAtom,
-  sourceTextAtom,
-  targetTextAtom,
-} from "../../atoms/translation";
+import { sourceLanguageAtom, targetLanguageAtom } from "../../atoms/index";
+import { sourceTextAtom, targetTextAtom } from "../../atoms/translation";
 import { useAtom } from "jotai";
 
 export const SwapButton = () => {

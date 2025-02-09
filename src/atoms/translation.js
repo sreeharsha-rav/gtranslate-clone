@@ -1,23 +1,8 @@
 import { atom } from "jotai";
 import { translateText } from "../api";
+import { sourceLanguageAtom, targetLanguageAtom } from "./index";
 
-// original base atoms
-export const sourceLanguageAtom = atom({
-  name: "English",
-  code: "en",
-  tts: true,
-  ttsCode: ["en-IN"],
-  ttsName: "en-IN-Standard-A",
-  ssmlGender: "FEMALE",
-});
-export const targetLanguageAtom = atom({
-  name: "Hindi",
-  code: "hi",
-  tts: true,
-  ttsCode: ["hi-IN"],
-  ttsName: "hi-IN-Standard-A",
-  ssmlGender: "FEMALE",
-});
+// text base atoms
 export const sourceTextAtom = atom("");
 export const targetTextAtom = atom("");
 
@@ -28,18 +13,17 @@ export const canTranslateAtom = atom((get) => {
 
   return (
     sourceLanguage.code !== targetLanguage.code &&
-    get(sourceTextAtom).length > 0
+    get(sourceTextAtom).trim().length > 0
   );
 });
 
-// Add loading state
-export const translationLoadingAtom = atom(false);
+// Optional TODO: Loading state atoms
+// export const translationLoadingAtom = atom(false);
+// export const translationErrorAtom = atom(null);
 
 // Enhanced async translation atom
 export const translateAtom = atom(null, async (get, set) => {
   try {
-    set(translationLoadingAtom, true);
-
     const sourceText = get(sourceTextAtom);
     const sourceLanguage = get(sourceLanguageAtom);
     const targetLanguage = get(targetLanguageAtom);
@@ -60,10 +44,5 @@ export const translateAtom = atom(null, async (get, set) => {
     // Add error handling
     console.error("Translation failed:", error);
     set(targetTextAtom, ""); // or set an error message
-  } finally {
-    set(translationLoadingAtom, false);
   }
 });
-
-// Add error handling
-// export const translationErrorAtom = atom(null);
