@@ -10,14 +10,14 @@ export const translateText = async (text, sourceLang, targetLang) => {
       },
       body: JSON.stringify({
         text,
-        sourceLang,
-        targetLang,
+        sourceLanguage: sourceLang,
+        targetLanguage: targetLang,
       }),
     });
 
+    // Add this to debug the response
     const data = await response.json();
-
-    return data.translations[0].translatedText;
+    return data.translatedText;
   } catch (error) {
     console.error("Translation error:", error);
     return "";
@@ -25,11 +25,7 @@ export const translateText = async (text, sourceLang, targetLang) => {
 };
 
 // Text-to-Speech API
-export const synthesizeSpeech = async (
-  text,
-  voice,
-  audioConfig = { audioEncoding: "MP3" }
-) => {
+export const synthesizeSpeech = async (text, ttsCode, ttsName) => {
   try {
     const response = await fetch(`${env.API_BASE_URL}/tts/synthesize`, {
       method: "POST",
@@ -38,53 +34,71 @@ export const synthesizeSpeech = async (
       },
       body: JSON.stringify({
         text,
-        voice,
-        audioConfig,
+        ttsCode,
+        ttsName,
       }),
     });
-    const data = await response.json();
 
-    // Convert base64 to audio
-    const base64Audio = data.audioContent;
-    // Create a binary string from base64
-    const binaryString = window.atob(base64Audio);
-    // Convert binary string to Uint8Array
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
+    if (!response.ok) {
+      const errorText = await response.text();
+      let errorMessage;
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.detail || errorText;
+      } catch {
+        errorMessage = errorText;
+      }
+      throw new Error(
+        `HTTP error! status: ${response.status}, message: ${errorMessage}`
+      );
     }
 
-    // Create blob from bytes
-    const blob = new Blob([bytes], { type: "audio/mp3" });
-    // Create URL for blob
-    const audioUrl = URL.createObjectURL(blob);
+    // Check if we received the correct content type
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("audio/mp3")) {
+      throw new Error(`Expected audio/mp3 but got ${contentType}`);
+    }
 
-    // Create and return audio element
+    const blob = await response.blob();
+    const audioUrl = URL.createObjectURL(blob);
     const audio = new Audio(audioUrl);
 
-    // Clean up the blob URL when audio is loaded
-    audio.onload = () => {
-      URL.revokeObjectURL(audioUrl);
-    };
+    // Return a promise that resolves when the audio is ready
+    return new Promise((resolve, reject) => {
+      audio.onloadedmetadata = () => resolve(audio);
+      audio.onerror = () => reject(new Error("Failed to load audio"));
 
-    return audio;
+      // Clean up on error or when done playing
+      const cleanup = () => URL.revokeObjectURL(audioUrl);
+      audio.onended = cleanup;
+      audio.onerror = () => {
+        cleanup();
+        reject(new Error("Audio playback failed"));
+      };
+    });
   } catch (error) {
     console.error("Speech synthesis error:", error);
-    return null;
+    throw error; // Re-throw to handle in the calling code
   }
 };
 
-// TODO: Speech-to-Text Component
-// const transcribeAudio = async (audioBlob) => {
-//   const response = await fetch(`${env.API_BASE_URL}/stt`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/octet-stream",
-//       "X-Auth-Secret": "auth-secret",
-//     },
-//     body: audioBlob,
-//   });
-
-//   const { transcript } = await response.json();
-//   return transcript;
-// };
+// Speech-to-Text API
+export const transcribeAudio = async (base64audio, languageCode) => {
+  try {
+    const response = await fetch(`${env.API_BASE_URL}/stt/synthesize`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        audioContent: base64audio,
+        languageCode,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("STT error:", error);
+    return { text: "", confidence: 0, langCode: "" };
+  }
+};

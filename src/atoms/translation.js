@@ -18,11 +18,12 @@ export const canTranslateAtom = atom((get) => {
 });
 
 // Optional TODO: Loading state atoms
-// export const translationLoadingAtom = atom(false);
+export const translationLoadingAtom = atom(false);
 // export const translationErrorAtom = atom(null);
 
 // Enhanced async translation atom
 export const translateAtom = atom(null, async (get, set) => {
+  set(translationLoadingAtom, true);
   try {
     const sourceText = get(sourceTextAtom);
     const sourceLanguage = get(sourceLanguageAtom);
@@ -44,5 +45,7 @@ export const translateAtom = atom(null, async (get, set) => {
     // Add error handling
     console.error("Translation failed:", error);
     set(targetTextAtom, ""); // or set an error message
+  } finally {
+    set(translationLoadingAtom, false);
   }
 });

@@ -27,13 +27,11 @@ export const speakInputAtom = atom(null, async (get, set) => {
 
     if (!sourceText || !sourceLanguage.tts) return;
 
-    const voice = {
-      languageCode: sourceLanguage.ttsCode[0], // Use first available tts code
-      name: sourceLanguage.ttsName,
-      ssmlGender: sourceLanguage.ssmlGender,
-    };
-
-    const audio = await synthesizeSpeech(sourceText, voice);
+    const audio = await synthesizeSpeech(
+      sourceText,
+      sourceLanguage.ttsCode[0],
+      sourceLanguage.ttsName
+    );
     if (audio) {
       // Add event listeners for better state management
       audio.addEventListener("ended", () => {
@@ -65,13 +63,11 @@ export const speakOutputAtom = atom(null, async (get, set) => {
 
     if (!targetText || !targetLanguage.tts) return;
 
-    const voice = {
-      languageCode: targetLanguage.ttsCode[0], // Use first available tts code
-      name: targetLanguage.ttsName,
-      ssmlGender: targetLanguage.ssmlGender,
-    };
-
-    const audio = await synthesizeSpeech(targetText, voice);
+    const audio = await synthesizeSpeech(
+      targetText,
+      targetLanguage.ttsCode[0],
+      targetLanguage.ttsName
+    );
     if (audio) {
       // Add event listeners for better state management
       audio.addEventListener("ended", () => {

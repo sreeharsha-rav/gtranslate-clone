@@ -1,66 +1,74 @@
 import { atom } from "jotai";
 import { atomWithReset } from "jotai/utils";
+import { transcribeAudio } from "../api";
+import { sourceLanguageAtom } from "./index";
+import { sourceTextAtom } from "./translation";
 
 // Base atoms
 export const isListeningAtom = atom(false);
+export const isProcessingVoiceAtom = atom(false);
 export const recognitionAtom = atomWithReset(null);
 
-// Configuration
-const SPEECH_CONFIG = {
-  continuous: true,
-  interimResults: true,
-  lang: "en-IN",
-};
+const chunksAtom = atom([]);
 
 // Derived atom to handle speech recognition
 export const speechRecognitionAtom = atom(
-  (get) => get(recognitionAtom),
-  (get, set, action) => {
+  (get) => get(chunksAtom),
+  async (get, set, action) => {
     switch (action.type) {
       case "START": {
         if (get(isListeningAtom)) return; // Already listening
-
-        try {
-          const recognition = new window.webkitSpeechRecognition();
-          Object.assign(recognition, SPEECH_CONFIG);
-
-          // Configure recognition handlers
-          recognition.onresult = (event) => {
-            const transcript = Array.from(event.results)
-              .map((result) => result[0].transcript)
-              .join(" ");
-            action.onTranscript?.(transcript);
-          };
-
-          recognition.onend = () => {
+        set(chunksAtom, []);
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then((stream) => {
+            const recorder = new MediaRecorder(stream);
+            recorder.ondataavailable = (event) => {
+              if (event.data.size > 0) {
+                set(chunksAtom, (prev) => [...prev, event.data]);
+              }
+            };
+            recorder.onstop = async () => {
+              set(isListeningAtom, false);
+              set(isProcessingVoiceAtom, true);
+              const blobParts = get(chunksAtom);
+              if (blobParts.length) {
+                const blob = new Blob(blobParts, { type: "audio/webm" });
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                  const base64Audio = reader.result.split(",")[1];
+                  const languageCode = get(sourceLanguageAtom).ttsCode[0];
+                  console.log("Transcribing audio for language:", languageCode);
+                  const sttResult = await transcribeAudio(
+                    base64Audio,
+                    languageCode
+                  );
+                  if (sttResult.text) {
+                    set(sourceTextAtom, sttResult.text);
+                  }
+                  set(isProcessingVoiceAtom, false);
+                  set(chunksAtom, []);
+                };
+                reader.readAsDataURL(blob);
+              } else {
+                set(isProcessingVoiceAtom, false);
+              }
+            };
+            recorder.start();
+            set(recognitionAtom, recorder);
+            set(isListeningAtom, true);
+          })
+          .catch((error) => {
+            console.error("MediaRecorder error:", error);
             set(isListeningAtom, false);
-            set(recognitionAtom, null);
-          };
-
-          recognition.onerror = (event) => {
-            console.error("Speech recognition error:", event.error);
-            set(isListeningAtom, false);
-            set(recognitionAtom, null);
-          };
-
-          // Start recognition
-          recognition.start();
-          set(recognitionAtom, recognition);
-          set(isListeningAtom, true);
-        } catch (error) {
-          console.error("Speech recognition failed:", error);
-          set(isListeningAtom, false);
-          set(recognitionAtom, null);
-        }
+          });
         break;
       }
       case "STOP": {
-        const recognition = get(recognitionAtom);
-        if (recognition) {
-          recognition.stop();
-          set(recognitionAtom, null);
+        const recorder = get(recognitionAtom);
+        if (recorder) {
+          recorder.stop();
         }
-        set(isListeningAtom, false);
         break;
       }
       default:
