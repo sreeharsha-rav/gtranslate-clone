@@ -1,0 +1,6 @@
+[submodule "gtranslate-py"]
+	path = gtranslate-py
+	url = https://github.com/sreeharsha-rav/gtranslate-py
+[submodule "gtranslate-node"]
+	path = gtranslate-node
+	url = https://github.com/sreeharsha-rav/gtranslate-node
